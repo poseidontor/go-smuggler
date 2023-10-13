@@ -1,4 +1,4 @@
-### HTTP Request Smuggling Detector
+## HTTP Request Smuggling Detector
 
 #### THIS PROJECT IS STILL IN DEVELOPMENT 
 
