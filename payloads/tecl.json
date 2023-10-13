@@ -1,0 +1,18 @@
+{
+    "cases":[
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "Transfer-Encoding: chunked",
+            "content_length": "Content-Length: 20", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "Transfer-Encoding: chunked",
+            "content_length": "Content-Length: 3",
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        }
+    ]
+}
