@@ -80,9 +80,9 @@ func scan(urls []string, time_out time.Duration, wg *sync.WaitGroup)	{
 				port = "443"
 			}	
 
-			//Add new testcases above
 			test_cases.Clte(hostname, port, path, time_out)
 			test_cases.Tecl(hostname, port, path, time_out)
+			test_cases.Tete(hostname, port, path, time_out)
 		}
 	}
 	
