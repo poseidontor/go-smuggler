@@ -1,0 +1,78 @@
+{
+    "cases":[
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "Transfer-Encoding: chunked\r\nTransfer-encoding: abc",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "Transfer-Encoding: chunked\r\nTransfer-Encoding: x",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+         
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "Transfer-encoding: chunked",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+         
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "Transfer-Encoding :   chunked",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+         
+         
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "Transfer-Encoding : chunked",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+         
+         
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "transfer-Encoding: chunked",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+         
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "transfer-encoding: chunked",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+         
+         
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": " Transfer-Encoding: chunked",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        },
+         
+        {
+            "content_type":"Content-Type: application/x-www-form-urlencoded",
+            "connection": "Connection: keep-alive",
+            "transfer_encoding": "X:X\r\nTransfer-Encoding: chunked",
+            "content_length": "Content-Length: 3", 
+            "body": "1\r\nZ\r\n0\r\n\r\n"
+        }
+         
+    ]    
+}        
