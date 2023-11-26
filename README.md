@@ -25,5 +25,5 @@ HTTP Request Smuggling vulnerability detector
 optional arguments:
   -u URL    set the target url
   -f FILE    provide path to file containing multiple URLS
-  -t URL    set timeout
+  -t SEC    set timeout
 ```
