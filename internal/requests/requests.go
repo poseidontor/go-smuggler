@@ -1,14 +1,14 @@
 package requests
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"github.com/tomnomnom/rawhttp"
 	"github.com/poseidontor/go-smuggler/internal/structures"
 	"time"
 )
 
-func MakeRequestHttp(httpRequest structures.HttpRequest) (resp *rawhttp.Response) {
+func MakeRequestHttp(httpRequest structures.HttpRequest) (resp *rawhttp.Response, err_req error) {
 	
 	req, err_http := rawhttp.FromURL("POST", "https://"+httpRequest.Hostname+"/")
 	if err_http != nil {
@@ -39,9 +39,9 @@ func MakeRequestHttp(httpRequest structures.HttpRequest) (resp *rawhttp.Response
 		req.AddHeader(httpRequest.ContentLength)
 	}
 	
-	resp, err_req := rawhttp.Do(req)
-	if err_req != nil {
-		fmt.Printf("[-] Connection Error: %s\n", err_req)
-	}
-	return
+	resp, err_req = rawhttp.Do(req)
+
+	return resp, err_req
+
+
 }

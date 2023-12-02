@@ -30,6 +30,7 @@ func Tete(hostname string, port string, path string, time_out time.Duration)	{
 	var timeout time.Duration = time_out
 	
 	var resp[2]*rawhttp.Response
+	var err[2]error
 	
 	for _, value := range payload.Cases {
 		for i := 0; i < 2; i++	{
@@ -42,25 +43,31 @@ func Tete(hostname string, port string, path string, time_out time.Duration)	{
 			httpRequest := structures.HttpRequest{Hostname: hostname, Port: port, 
 				Path: path, ContentType: content_type, 
 				Connection: connection, TransferEncoding: transfer_encoding, 
-				ContentLength: content_length, Body: body, 
-				Timeout: timeout}
-			resp[i] = requests.MakeRequestHttp(httpRequest);
+				ContentLength: content_length, 
+				Body: body, Timeout: timeout}
+			resp[i], err[i] = requests.MakeRequestHttp(httpRequest);
 			time.Sleep(10 * time.Millisecond)
 		}
 		
-		if resp[0] != nil && resp[1] != nil{
-			if resp[0].StatusCode() == "504" || resp[1].StatusCode() == "504" {
-				fmt.Printf("[-] Received 504: Gateway Timeout for %s\n", hostname)
+		if(err[0] == nil && err[1] == nil) { 
+			if resp[0] != nil && resp[1] != nil{
+				if resp[0].StatusCode() == "504" || resp[1].StatusCode() == "504" {
+					fmt.Printf("[-] Received 504: Gateway Timeout for %s\n", hostname)
+				}
+
+				if resp[0].StatusCode() == "200" && resp[1].StatusCode() == "403" {
+					color.Red("[+] https://%s:%s%s could possibly be vulnerble to TE.TE based request smuggling.\n", hostname, port, path)
+					break
+				}
+				secs := time.Since(start).Seconds()
+
+				fmt.Printf("%.2f seconds taken for https://%s:%s%s\n", secs, hostname, port, path)
 			}
 
-			if resp[0].StatusCode() == "200" && resp[1].StatusCode() == "403" {
-				color.Red("[+] https://%s:%s%s could possibly be vulnerble to TE.TE based request smuggling.\n", hostname, port, path)
-				break
-			}
-			secs := time.Since(start).Seconds()
-
-			fmt.Printf("%.2f seconds taken for https://%s:%s%s\n", secs, hostname, port, path)
+		} else {
+			fmt.Printf("Request for %s errored out!\n" , hostname)
 		}
+
 		
 	}
 } 
