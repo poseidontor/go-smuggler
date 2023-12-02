@@ -1,48 +1,47 @@
 package requests
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 	"github.com/tomnomnom/rawhttp"
+	"github.com/poseidontor/go-smuggler/internal/structures"
 	"time"
 )
 
-func Make_request_http1(hostname string, port string, path string, content_type string, 
-	connection string, transfer_encoding string, content_length string, body string, timeout time.Duration ) (resp *rawhttp.Response) {
+func MakeRequestHttp(httpRequest structures.HttpRequest) (resp *rawhttp.Response, err_req error) {
 	
-	req, err_http := rawhttp.FromURL("POST", "https://"+hostname+"/")
+	req, err_http := rawhttp.FromURL("POST", "https://"+httpRequest.Hostname+"/")
 	if err_http != nil {
 		log.Fatal(err_http)
 	}
 		
 	req.Method = "POST"
 	req.Proto = "HTTP/1.1"
-	req.Hostname = hostname
-	req.Port = port
-	req.Path = path
+	req.Hostname = httpRequest.Hostname
+	req.Port = httpRequest.Port
+	req.Path = httpRequest.Path
 
 	//automatically assign host header value
 	req.AutoSetHost()
 
 	//setting headers
-	req.AddHeader(content_type)
-	req.AddHeader(connection)
-	req.AddHeader(transfer_encoding)
+	req.AddHeader(httpRequest.ContentType)
+	req.AddHeader(httpRequest.Connection)
+	req.AddHeader(httpRequest.TransferEncoding)
 
-	req.Body = body
-	req.Timeout = timeout * time.Second
+	req.Body = httpRequest.Body
+	req.Timeout = httpRequest.Timeout * time.Second
 	
 	//Automatically set content-length if not specified
-	if content_length == ""	{
+	if httpRequest.ContentLength == ""	{
 		req.AutoSetContentLength()
 	}	else {
-		req.AddHeader(content_length)
+		req.AddHeader(httpRequest.ContentLength)
 	}
-	//fmt.Printf("%s\n\n", req.String())
 	
-	resp, err_req := rawhttp.Do(req)
-	if err_req != nil {
-		fmt.Printf("[-] Connection Error: %s\n", err_req)
-	}
-	return
+	resp, err_req = rawhttp.Do(req)
+
+	return resp, err_req
+
+
 }

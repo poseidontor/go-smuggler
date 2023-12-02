@@ -28,6 +28,7 @@ func Tecl(hostname string, port string, path string, time_out time.Duration)	{
 	var timeout time.Duration = time_out
 
 	var resp[2]*rawhttp.Response
+	var err[2]error 
 	for i := 0; i < 2; i++	{
 		content_type := payload.Cases[i].ContentType
 		connection := payload.Cases[i].Connnection
@@ -35,19 +36,28 @@ func Tecl(hostname string, port string, path string, time_out time.Duration)	{
 		body := payload.Cases[i].Body
 		content_length := payload.Cases[i].ContentLength
 
-		resp[i] = requests.Make_request_http1(hostname, port, path, 
-		content_type, connection, transfer_encoding, content_length, body, timeout);
+		httpRequest := structures.HttpRequest{Hostname: hostname, Port: port, 
+			Path: path, ContentType: content_type, 
+			Connection: connection, TransferEncoding: transfer_encoding, 
+			ContentLength: content_length, Body: body, 
+			Timeout: timeout}
+
+		resp[i], err[i] = requests.MakeRequestHttp(httpRequest);
 	}
-	if resp[0] != nil && resp[1] != nil{ 
-		if resp[0].StatusCode() == "504" || resp[1].StatusCode() == "504" {
-			fmt.Printf("[-] Received 504: Gateway Timeout for %s\n", hostname)
-		}
+	if(err[0] == nil && err[1] == nil){
+		if resp[0] != nil && resp[1] != nil{ 
+			if resp[0].StatusCode() == "504" || resp[1].StatusCode() == "504" {
+				fmt.Printf("[-] Received 504: Gateway Timeout for %s\n", hostname)
+			}
 
-		if resp[0].StatusCode() == "500" && resp[1].StatusCode() == "200" {
-			color.Red("[+] https://%s:%s%s could possibly be vulnerble to TE.CL based request smuggling.\n", hostname, port, path)
-		}
-		secs := time.Since(start).Seconds()
+			if resp[0].StatusCode() == "500" && resp[1].StatusCode() == "200" {
+				color.Red("[+] https://%s:%s%s could possibly be vulnerble to TE.CL based request smuggling.\n", hostname, port, path)
+			}
+			secs := time.Since(start).Seconds()
 
-		fmt.Printf("%.2f seconds taken for https://%s:%s%s\n", secs, hostname, port, path)
+			fmt.Printf("%.2f seconds taken for https://%s:%s%s\n", secs, hostname, port, path)
+		}
+	} else {
+		fmt.Printf("Request for %s errored out!\n" , hostname)
 	}
 }
