@@ -34,8 +34,12 @@ func Clte(hostname string, port string, path string, time_out time.Duration)	{
 		transfer_encoding := payload.Cases[i].TransferEncoding
 		body := payload.Cases[i].Body
 
-		resp[i] = requests.Make_request_http1(hostname, port, path, 
-		content_type, connection, transfer_encoding, "", body, timeout);
+		httpRequest := structures.HttpRequest{Hostname: hostname, Port: port, Path: path, 
+			ContentType: content_type, Connection: connection, 
+			TransferEncoding: transfer_encoding, ContentLength: "", 
+			Body: body, 
+			Timeout: timeout}
+		resp[i] = requests.MakeRequestHttp(httpRequest);
 	}
 	
 	if resp[0].StatusCode() == "504" || resp[1].StatusCode() == "504" {

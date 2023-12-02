@@ -39,7 +39,12 @@ func Tete(hostname string, port string, path string, time_out time.Duration)	{
 			body := value.Body
 			content_length := value.ContentLength
 
-			resp[i] = requests.Make_request_http1(hostname, port, path, content_type, connection, transfer_encoding, content_length, body, timeout);
+			httpRequest := structures.HttpRequest{Hostname: hostname, Port: port, 
+				Path: path, ContentType: content_type, 
+				Connection: connection, TransferEncoding: transfer_encoding, 
+				ContentLength: content_length, Body: body, 
+				Timeout: timeout}
+			resp[i] = requests.MakeRequestHttp(httpRequest);
 			time.Sleep(10 * time.Millisecond)
 		}
 		

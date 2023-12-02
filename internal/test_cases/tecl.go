@@ -35,8 +35,13 @@ func Tecl(hostname string, port string, path string, time_out time.Duration)	{
 		body := payload.Cases[i].Body
 		content_length := payload.Cases[i].ContentLength
 
-		resp[i] = requests.Make_request_http1(hostname, port, path, 
-		content_type, connection, transfer_encoding, content_length, body, timeout);
+		httpRequest := structures.HttpRequest{Hostname: hostname, Port: port, 
+			Path: path, ContentType: content_type, 
+			Connection: connection, TransferEncoding: transfer_encoding, 
+			ContentLength: content_length, Body: body, 
+			Timeout: timeout}
+
+		resp[i] = requests.MakeRequestHttp(httpRequest);
 	}
 	if resp[0] != nil && resp[1] != nil{ 
 		if resp[0].StatusCode() == "504" || resp[1].StatusCode() == "504" {
