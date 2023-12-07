@@ -1,21 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"io/ioutil"
 	"flag"
-	"strings"
-	"time"
-	"os"
-	"sync"
+	"fmt"
+	"io/ioutil"
+	"log"
 	"net/url"
+	"os"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/poseidontor/go-smuggler/internal/test_cases"
 )
 
+func main() {
 
-func main()	{
-	
 	var uri string
 	var file_path string
 	var time_out time.Duration
@@ -26,48 +26,41 @@ func main()	{
 
 	urls := make([]string, 0)
 
-	if uri != ""	{
+	if uri != "" {
 		urls = append(urls, uri)
 	}
 
-	if file_path != ""	{
+	if file_path != "" {
 		url_file, err_io := ioutil.ReadFile(file_path)
-		if err_io != nil	{
+		if err_io != nil {
 			log.Fatal("Error opening file. Please provide the full path to the file.")
 		}
 		read_urls := strings.Split(string(url_file), "\n")
-		for _,link	:= range read_urls	{
+		for _, link := range read_urls {
 			urls = append(urls, link)
 		}
 	}
 
-	if uri == "" && file_path == ""	{
+	if uri == "" && file_path == "" {
 		fmt.Println("Usage: go run cmd/main.go -u {URL} [-f {urls_file}] [-t {timeout}]")
-		os.Exit(0)		
+		os.Exit(0)
 	}
 
-	
-	var wg sync.WaitGroup
-   	wg.Add(1)
-	go scan(urls, time_out, &wg)
-	//time.Sleep(5 * time.Second)
-	wg.Wait()
-	
+	scan(urls, time_out)
+
 }
 
-func scan(urls []string, time_out time.Duration, wg *sync.WaitGroup)	{
-
-	defer wg.Done()
+func scan(urls []string, time_out time.Duration) {
 
 	var hostname string
 	var port string
 	var path string
-	var u *url.URL 
+	var u *url.URL
 	var err error
-	
-	
-	for _, uri := range urls	{
-		if uri != ""	{
+	var wg sync.WaitGroup
+
+	for _, uri := range urls {
+		if uri != "" {
 			u, err = url.Parse(uri)
 			if err != nil {
 				log.Fatal("Error reading the URL")
@@ -76,14 +69,18 @@ func scan(urls []string, time_out time.Duration, wg *sync.WaitGroup)	{
 			port = u.Port()
 			path = u.Path
 
-			if port == ""	{
+			if port == "" {
 				port = "443"
-			}	
+			}
 
-			test_cases.Clte(hostname, port, path, time_out)
-			test_cases.Tecl(hostname, port, path, time_out)
-			test_cases.Tete(hostname, port, path, time_out)
+			wg.Add(3)
+
+			go test_cases.Clte(hostname, port, path, time_out, &wg)
+			go test_cases.Tecl(hostname, port, path, time_out, &wg)
+			go test_cases.Tete(hostname, port, path, time_out, &wg)
 		}
 	}
-	
+
+	wg.Wait()
+
 }

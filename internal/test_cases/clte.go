@@ -6,13 +6,17 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"encoding/json"
+	"sync"
 	"github.com/tomnomnom/rawhttp"
 	"github.com/poseidontor/go-smuggler/internal/structures"
 	"github.com/poseidontor/go-smuggler/internal/requests"
 )
 
 
-func Clte(hostname string, port string, path string, time_out time.Duration)	{
+func Clte(hostname string, port string, path string, time_out time.Duration, wg *sync.WaitGroup)	{
+
+	defer wg.Done()
+
 	start := time.Now()
 	content, err_io := ioutil.ReadFile("./payloads/clte.json")
 	if err_io != nil	{
